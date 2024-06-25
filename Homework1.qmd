@@ -1,0 +1,109 @@
+---
+title: "Homework 1"
+subtitle: "Air Quality Dataset Analysis"
+
+author: "Gary Walsh - use19210998"
+format: pdf
+header-includes:
+  - \usepackage{xcolor}
+  - \definecolor{darkblue}{RGB}{0, 0, 139}
+  - \definecolor{darkred}{RGB}{140, 0,0}
+  - \usepackage{colortbl}
+  - \usepackage{booktabs}
+---
+
+# \textcolor{darkred} {Introduction}
+
+The `airquality` dataset from the `datasets` package in R contains daily air quality measurements in New York, from May to September 1973. The dataset includes measurements of Ozone, Solar Radiation, Wind, and Temperature.
+
+In this document, we will plot the relationship between Ozone levels and Wind speed. The data will be color-coded based on the month to provide additional insights.
+
+## \textcolor{darkred} {Approach}
+
+1.  **Dataset:** We use the `airquality` dataset from the `datasets` package.
+2.  **Plot Type:** Scatter plot with color-coding for months and a smoother line to show the trend.
+3.  **Descriptive Statistics:** Mean Ozone levels and mean Wind speed.
+
+## \textcolor{darkred} {Descriptive Statistics}
+
+Table 1 below presents some descriptive statistics for the airquality dataset.
+
+```{r}
+#| echo: false
+#| warning: false
+library(knitr)
+
+# Calculate descriptive statistics
+descriptive_stats <- data.frame(
+  Statistic = c("Mean", "Median", "Std Dev", "Min", "Max"),
+  Ozone = c(mean(airquality$Ozone, na.rm = TRUE), 
+            median(airquality$Ozone, na.rm = TRUE), 
+            sd(airquality$Ozone, na.rm = TRUE), 
+            min(airquality$Ozone, na.rm = TRUE), 
+            max(airquality$Ozone, na.rm = TRUE)),
+  Wind = c(mean(airquality$Wind, na.rm = TRUE), 
+           median(airquality$Wind, na.rm = TRUE), 
+           sd(airquality$Wind, na.rm = TRUE), 
+           min(airquality$Wind, na.rm = TRUE), 
+           max(airquality$Wind, na.rm = TRUE))
+)
+
+# Display the table
+kable(descriptive_stats, caption = "Descriptive Statistics for Ozone and Wind")
+```
+
+### \textcolor{darkblue} {Summary}
+
+### \textcolor{darkblue}{
+Ozone levels exhibit high variability with extreme values, suggesting significant fluctuations in air quality. Wind speeds are more stable, with measurements closely clustering around the mean.}
+
+## \textcolor{darkred} {Plot}
+
+The scatter plot in fig 1 below shows the relationship between Ozone levels and Wind speed. The points are color-coded based on the month, and a smoother line is added to illustrate the trend.
+
+```{r}
+#| echo: false
+#| warning: false
+# Load the dataset
+data(airquality)
+
+# Convert Month to a factor for better plotting
+airquality$Month <- factor(airquality$Month, 
+                           levels = 5:9, 
+                           labels = c("May", "June", "July", "August", "September"))
+
+# Create the plot
+library(ggplot2)
+ggplot(airquality, aes(x = Wind, y = Ozone, color = Month)) +
+  geom_point(size = 2, alpha = 0.7) +
+  geom_smooth(method = "loess", se = FALSE, color = "black", linetype = "dashed") +
+  scale_color_brewer(palette = "Set1") +
+  labs(title = "Ozone Levels vs Wind Speed",
+       subtitle = "Color-coded by Month",
+       x = "Wind Speed (mph)",
+       y = "Ozone Levels (ppb)",
+       color = "Month") +
+  theme_minimal() +
+  theme(legend.position = "top",
+        plot.title = element_text(face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        axis.title = element_text(face = "bold"),
+        panel.grid.major = element_line(color = "grey80"),
+        panel.grid.minor = element_line(color = "grey90"))
+
+```
+
+### \textcolor{darkblue} {Interpretation of the Plot}
+
+\textcolor{darkblue} {1. Inverse Relationship:} \textcolor{darkblue}{Ozone levels generally decrease as Wind speed increases, suggesting higher wind speeds help disperse Ozone.}
+
+\textcolor{darkblue} {2. Seasonal Variation:}
+
+-   \textcolor{darkblue}{ May and June: Lower Ozone levels across various wind speeds.}
+-   \textcolor{darkblue}{July and August: Higher Ozone levels at lower wind speeds, indicating severe Ozone pollution in mid-summer.}
+-   \textcolor{darkblue} {September: Mixed data but overall lower Ozone levels as fall approaches.}
+
+\textcolor{darkblue} {2. Data Dispersion:}
+
+-   \textcolor{darkblue}{High variability in Ozone levels at lower wind speeds, especially in July and August.}
+-   \textcolor{darkblue}{Reduced variability and lower Ozone levels at higher wind speeds.}
