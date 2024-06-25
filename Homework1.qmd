@@ -57,6 +57,57 @@ kable(descriptive_stats, caption = "Descriptive Statistics for Ozone and Wind")
 ### \textcolor{darkblue}{
 Ozone levels exhibit high variability with extreme values, suggesting significant fluctuations in air quality. Wind speeds are more stable, with measurements closely clustering around the mean.}
 
+## \textcolor{darkred} {Plot 1}
+
+The scatter plot in fig 1 below shows the relationship between Ozone levels and Wind speed. The points are color-coded based on the month, and a smoother line is added to illustrate the trend.
+
+```{r}
+#| echo: false
+#| warning: false
+# Load the dataset
+data(airquality)
+
+# Convert Month to a factor for better plotting
+airquality$Month <- factor(airquality$Month, 
+                           levels = 5:9, 
+                           labels = c("May", "June", "July", "August", "September"))
+
+# Create the plot
+library(ggplot2)
+ggplot(airquality, aes(x = Wind, y = Ozone, color = Month)) +
+  geom_point(size = 2, alpha = 0.7) +
+  geom_smooth(method = "loess", se = FALSE, color = "black", linetype = "dashed") +
+  scale_color_brewer(palette = "Set1") +
+  labs(title = "Ozone Levels vs Wind Speed",
+       subtitle = "Color-coded by Month",
+       x = "Wind Speed (mph)",
+       y = "Ozone Levels (ppb)",
+       color = "Month") +
+  theme_minimal() +
+  theme(legend.position = "top",
+        plot.title = element_text(face = "bold", hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5),
+        axis.title = element_text(face = "bold"),
+        panel.grid.major = element_line(color = "grey80"),
+        panel.grid.minor = element_line(color = "grey90"))
+
+```
+
+### \textcolor{darkblue} {Interpretation of the Plot}
+
+\textcolor{darkblue} {1. Inverse Relationship:} \textcolor{darkblue}{Ozone levels generally decrease as Wind speed increases, suggesting higher wind speeds help disperse Ozone.}
+
+\textcolor{darkblue} {2. Seasonal Variation:}
+
+-   \textcolor{darkblue}{ May and June: Lower Ozone levels across various wind speeds.}
+-   \textcolor{darkblue}{July and August: Higher Ozone levels at lower wind speeds, indicating severe Ozone pollution in mid-summer.}
+-   \textcolor{darkblue} {September: Mixed data but overall lower Ozone levels as fall approaches.}
+
+\textcolor{darkblue} {2. Data Dispersion:}
+
+-   \textcolor{darkblue}{High variability in Ozone levels at lower wind speeds, especially in July and August.}
+-   \textcolor{darkblue}{Reduced variability and lower Ozone levels at higher wind speeds.}
+
 ## \textcolor{darkred} {Monthly Summary Statistics for Ozone Levels}
 
 Table 2 below presents the monthly summary statistics for Ozone levels.
@@ -84,5 +135,19 @@ kable(monthly_stats, caption = "Monthly Summary Statistics for Ozone Levels", fo
 
 ```
 
+## \textcolor{darkred} {Additional Simple Plot: Ozone Levels Distribution}
 
+The histogram in fig 3 below shows the distribution of Ozone levels.
 
+```{r}
+#| echo: false
+#| warning: false
+ggplot(airquality, aes(x = Ozone)) +
+  geom_histogram(binwidth = 10, fill = "darkblue", color = "white", alpha = 0.7) +
+  labs(title = "Distribution of Ozone Levels",
+       x = "Ozone Levels (ppb)",
+       y = "Frequency") +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold", hjust = 0.5),
+        axis.title = element_text(face = "bold"))
+```
