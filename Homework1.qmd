@@ -2,7 +2,7 @@
 title: "Homework 1"
 subtitle: "Air Quality Dataset Analysis"
 
-author: "Gary Walsh - use19210998"
+author: "Gary Walsh - 19210998"
 format: pdf
 header-includes:
   - \usepackage{xcolor}
